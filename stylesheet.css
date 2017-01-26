@@ -1,0 +1,19 @@
+.center {
+  font-family: 'Comic Sans MS';
+}
+
+.long {
+  height: 1000px;
+}
+
+.cat-clicked {
+  border: 1px solid #c8e6c9;
+}
+
+.diff-clicked {
+  border: 1px solid #c8e6c9;
+}
+
+.btn {
+  width: 220px;
+}
