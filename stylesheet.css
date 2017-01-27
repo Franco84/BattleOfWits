@@ -17,3 +17,8 @@
 .btn {
   width: 220px;
 }
+
+.timer {
+  font-size: 2em;
+  text-align: center;
+}
