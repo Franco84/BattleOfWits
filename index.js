@@ -4,6 +4,10 @@ var question
 var choices
 var seconds
 var intervalID
+var player1 = {"points": 0, "name": "Player 1", "id": 1}
+var player2 = {"points": 0, "name": "Player 2", "id": 2}
+var currentPlayer = player1
+var difficulty
 
 function shuffle(categories) {
     for (let i = categories.length; i; i--) {
@@ -18,15 +22,16 @@ function createButtons(){
   let firstRow = sixCategories.slice(0, 3)
   let secondRow = sixCategories.slice(3, 6)
   firstRow.forEach(function(e){
-    $('div.firstRow').append(`<button class="waves-effect waves-light btn blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`)
+    $('div.firstRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
   })
   secondRow.forEach(function(e){
-    $('div.secondRow').append(`<button class="waves-effect waves-light btn blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`)
+    $('div.secondRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
   })
   difficulties.forEach(function(e){
-    $('div.difficultyRow').append(`<button class="waves-effect waves-light btn blue lighten-2 difficulty" data-diffid=${e.toLowerCase()}>${e}</button>`)
+    $('div.difficultyRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 difficulty" data-diffid=${e}>${e}</button>`).hide()
   })
-  $('div.submitRow').append(`<button class="waves-effect waves-light btn blue lighten-2 submit">Go!</button>`)
+  $('div.submitRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 submit">Go!</button>`).hide()
+  $('div').fadeIn(750)
 }
 
 function createEventListener(){
@@ -40,6 +45,7 @@ function createEventListener(){
   })
   $(".submit").on('click', function(){
     //search for clicked classes or else do not proceed
+    difficulty = $(".diff-clicked").textContent
     submit()
   })
 }
@@ -51,25 +57,21 @@ function runner(){
 
 function submit(){
   let categoryId = $('.cat-clicked')[0].dataset.catid
-  let difficulty = $('.diff-clicked')[0].dataset.diffid
-  let link = `http://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty}&type=multiple`
+  difficulty = $('.diff-clicked')[0].dataset.diffid
+  let link = `http://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty.toLowerCase()}&type=multiple`
   $.ajax({
     url: link,
     method: 'GET'}).done(function(jsonp){
       question = jsonp.results
       randomChoices()
+      clearPage()
+      setTimeout(showQuestion, 750)
+      setTimeout(startTimer, 750)
+      setTimeout(createAnswerListener, 751)
     }).fail(function(err) {
       throw err
     })
-
-  // clearPage()
-  startTimer()
-    //show question / choices, countdown timer, etc
-
-}
-
-function clearPage(){
-  $('btn.category').hide()
+    // show question / choices, countdown timer, etc
 }
 
 function randomChoices() {
@@ -77,17 +79,35 @@ function randomChoices() {
   shuffle(choices)
 }
 
+function clearPage(){
+  $('button, p').fadeOut(750)
+  setTimeout(function(){
+    $('button, p').remove()
+  }, 750)
+}
+
+function clearQuestionPage(){
+  $('button.answer, button.submit, p').fadeOut(750)
+  setTimeout(function(){
+    $('button.answer, .button-div, p').remove()
+  }, 750)
+}
+
+
 /// Start Timer ///
 
 function startTimer() {
   seconds = 30
-  $('div.timer').append(`<p class="timer">:${seconds}</p>`)
+  $('div.timer-div').append(`<h3 class="timer">${seconds}</h3>`)
   intervalID = setInterval(countDown, 1000)
 }
 
 function countDown() {
   seconds--
-  $('p.timer').replaceWith(`<p class="timer">:${seconds}</p>`)
+  $('h3.timer').replaceWith(`<h3 class="timer">${seconds}</h3>`)
+  if (seconds <= 5) {
+    $("h3.timer").addClass('redtimer')
+  }
   if (seconds < 1) {
     stopTimer(intervalID)
   }
@@ -98,6 +118,65 @@ function stopTimer(){
 }
 
 /// End Timer ///
+
+function showQuestion(){
+  $('div.firstRow').append(`<p>${question[0].question}</p>`).hide()
+  $('div.difficultyRow').append(`<button class="waves-effect waves-light btn blue lighten-2 submit">Final Answer!</button>`).hide()
+  $('div.firstRow').fadeIn(500)
+  choices.forEach(function(e, index){
+    $('div.secondRow').append(`<div class="buttonid${index} button-div"></div>`)
+    $(`.buttonid${index}`).hide()
+    $(`.buttonid${index}`).append(`<button class="waves-effect waves-light btn-large blue lighten-2 answer" id=${index}>${e}</button>`)
+    $(`.buttonid${index}`).delay(500*(index+1)).fadeIn(500)
+  })
+  $('div.difficultyRow').delay(2500).fadeIn(500)
+  // $('div.secondRow').fadeIn(500)
+}
+
+function createAnswerListener(){
+  $(".answer").on('click', function(){
+    $(".answer").removeClass("answer-clicked")
+    $(this).addClass("answer-clicked")
+  })
+  $(".submit").on('click', function(){
+    //search for clicked classes or else do not proceed
+    submitAnswer()
+  })
+}
+
+function submitAnswer(){
+  if ($(".answer-clicked")[0].textContent === question[0].correct_answer){
+    correctAnswer()
+  } else {
+    wrongAnswer()
+  }
+}
+
+function correctAnswer(){
+  currentPlayer.points += diffVal()
+  clearQuestionPage()
+  $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
+  setTimeout(runner, 750)
+}
+
+function wrongAnswer(){
+  var audio = new Audio('Wrong.mp3')
+  audio.play()
+  debugger
+  alert('WRONG')
+  clearQuestionPage()
+  setTimeout(runner, 750)
+}
+
+function diffVal(){
+  if (difficulty === "Easy"){
+    return 1
+  } else if (difficulty === "Medium") {
+    return 2
+  } else if (difficulty === "Hard") {
+    return 3
+  }
+}
 
 
 $(document).ready(runner)
