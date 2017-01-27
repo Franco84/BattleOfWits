@@ -1,5 +1,7 @@
 var categories = [[9, "General Knowledge"], [10, "Books"], [11, "Film"], [12, "Music"], [13, "Musical Theater"], [14, "Television"], [15, "Video Games"], [16, "Board Games"], [17, "Nature"], [18, "Computers"], [19, "Math"], [20, "Mythology"], [21, "Sports"], [22, "Geography"], [23, "History"], [24, "Politics"], [25, "Art"], [26, "Celebrities"], [27, "Animals"], [28, "Vehicles"], [29, "Comics"], [30, "Gadgets"], [32, "Cartoons"]]
 var difficulties = ["Easy", "Medium", "Hard"]
+var question
+var choices
 
 function shuffle(categories) {
     for (let i = categories.length; i; i--) {
@@ -40,13 +42,29 @@ function createEventListener(){
   })
 }
 
-// on submit take category id from clicked element
 function submit(){
+  let categoryId = $('.cat-clicked')[0].dataset.catid
+  let difficulty = $('.diff-clicked')[0].dataset.diffid
+  let link = `http://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty}&type=multiple`
+  $.ajax({
+    url: link,
+    method: 'GET'}).done(function(jsonp){
+      question = jsonp.results
+      randomChoices()
+    }).fail(function(err) {
+      throw err
+    })
+    //clear page
+    //show question / choices, countdown timer, etc
 
 }
-// function
-// $('.clicked').dataset.catid
-// $('.clicked').dataset.diffid
+
+
+function randomChoices() {
+  choices = [question[0].correct_answer,...question[0].incorrect_answers]
+  shuffle(choices)
+}
+
 
 function runner(){
   createButtons()
@@ -54,6 +72,3 @@ function runner(){
 }
 
 $(document).ready(runner)
-
-
-// api call = `https://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty}&type=multiple`
