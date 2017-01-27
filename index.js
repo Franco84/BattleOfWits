@@ -180,12 +180,19 @@ function switchPlayers(){
 function correctAnswer(){
   currentPlayer.points += diffVal()
   $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
+  $('div.timer-div').append("<img src=images/Satisfied.jpg></img>")
+  setTimeout(function(){
+    $('audio#educated')[0].play()
+  }, 50)
+  setTimeout(function(){
+    $('img').remove()
+  }, 1000)
 }
 
 function wrongAnswer(){
   $('div.timer-div').append("<img src=images/trump.jpg></img>")
   setTimeout(function(){
-    $('audio')[0].play()
+    $('audio#wrong')[0].play()
   }, 300)
   setTimeout(function(){
     $('img').remove()
