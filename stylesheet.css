@@ -48,3 +48,8 @@
 p {
   font-size: 2em;
 }
+
+img {
+  display: block;
+  margin: auto;
+}

@@ -8,6 +8,7 @@ var player1 = {"points": 0, "name": "Player 1", "id": 1}
 var player2 = {"points": 0, "name": "Player 2", "id": 2}
 var currentPlayer = player1
 var difficulty
+var submitted = false
 
 function shuffle(categories) {
     for (let i = categories.length; i; i--) {
@@ -46,7 +47,10 @@ function createEventListener(){
   $(".submit").on('click', function(){
     //search for clicked classes or else do not proceed
     difficulty = $(".diff-clicked").textContent
-    submit()
+    if (submitted === false){
+      submitted = true
+      submit()
+    }
   })
 }
 
@@ -87,10 +91,10 @@ function clearPage(){
 }
 
 function clearQuestionPage(){
-  $('button.answer, button.submit, p').fadeOut(750)
-  setTimeout(function(){
-    $('button.answer, .button-div, p').remove()
-  }, 750)
+  // $('button.answer, button.submit, h3.timer, p').fadeOut(750)
+  // setTimeout(function(){
+    $('button.answer, .button-div, button.submit, h3.timer, p').remove()
+  // }, 750)
 }
 
 
@@ -130,7 +134,6 @@ function showQuestion(){
     $(`.buttonid${index}`).delay(500*(index+1)).fadeIn(500)
   })
   $('div.difficultyRow').delay(2500).fadeIn(500)
-  // $('div.secondRow').fadeIn(500)
 }
 
 function createAnswerListener(){
@@ -150,22 +153,43 @@ function submitAnswer(){
   } else {
     wrongAnswer()
   }
+  endRound()
+}
+
+function endRound() {
+  clearQuestionPage()
+  stopTimer()
+  submitted = false
+  checkEndGame()
+  switchPlayers()
+  setTimeout(runner, 1000)
+}
+
+function checkEndGame(){
+  // if (currentPlayer.points >= final)
+}
+
+function switchPlayers(){
+  if (currentPlayer === player1) {
+    currentPlayer = player2
+  } else {
+    currentPlayer = player1
+  }
 }
 
 function correctAnswer(){
   currentPlayer.points += diffVal()
-  clearQuestionPage()
   $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
-  setTimeout(runner, 750)
 }
 
 function wrongAnswer(){
-  var audio = new Audio('Wrong.mp3')
-  audio.play()
-  debugger
-  alert('WRONG')
-  clearQuestionPage()
-  setTimeout(runner, 750)
+  $('div.timer-div').append("<img src=images/trump.jpg></img>")
+  setTimeout(function(){
+    $('audio')[0].play()
+  }, 300)
+  setTimeout(function(){
+    $('img').remove()
+  }, 1000)
 }
 
 function diffVal(){
