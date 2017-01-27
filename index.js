@@ -2,6 +2,8 @@ var categories = [[9, "General Knowledge"], [10, "Books"], [11, "Film"], [12, "M
 var difficulties = ["Easy", "Medium", "Hard"]
 var question
 var choices
+var seconds
+var intervalID
 
 function shuffle(categories) {
     for (let i = categories.length; i; i--) {
@@ -42,6 +44,11 @@ function createEventListener(){
   })
 }
 
+function runner(){
+  createButtons()
+  createEventListener()
+}
+
 function submit(){
   let categoryId = $('.cat-clicked')[0].dataset.catid
   let difficulty = $('.diff-clicked')[0].dataset.diffid
@@ -54,21 +61,43 @@ function submit(){
     }).fail(function(err) {
       throw err
     })
-    //clear page
+
+  // clearPage()
+  startTimer()
     //show question / choices, countdown timer, etc
 
 }
 
+function clearPage(){
+  $('btn.category').hide()
+}
 
 function randomChoices() {
   choices = [question[0].correct_answer,...question[0].incorrect_answers]
   shuffle(choices)
 }
 
+/// Start Timer ///
 
-function runner(){
-  createButtons()
-  createEventListener()
+function startTimer() {
+  seconds = 30
+  $('div.timer').append(`<p class="timer">:${seconds}</p>`)
+  intervalID = setInterval(countDown, 1000)
 }
+
+function countDown() {
+  seconds--
+  $('p.timer').replaceWith(`<p class="timer">:${seconds}</p>`)
+  if (seconds < 1) {
+    stopTimer(intervalID)
+  }
+}
+
+function stopTimer(){
+  clearInterval(intervalID)
+}
+
+/// End Timer ///
+
 
 $(document).ready(runner)
