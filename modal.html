@@ -12,13 +12,29 @@
   </head>
   <body>
     <!-- Modal Trigger -->
-  <button data-target="modal1" class="btn modal-btn">Modal</button>
+  <button data-target="modal1" class="btn modal-btn">Start!</button>
 
     <!-- Modal Structure -->
     <div id="modal1" class="modal" style="visibility: hidden;">
       <div class="modal-content">
-        <h4>Modal Header</h4>
-        <p>A bunch of text</p>
+        <div class="input-field col s3 center">
+          <div>How many points until a player wins? </div>
+          <button class="btn-floating btn-large blue lighten-2 pointswin" data-pointswin=1>10</button>
+          <button class="btn-floating btn-large blue lighten-2 pointswin" data-pointswin=2>20</button>
+          <button class="btn-floating btn-large blue lighten-2 pointswin" data-pointswin=3>30</button>
+
+
+        </div>
+        <div class="input-field col s3">
+          <input id="player1Name" type="text" class="validate">
+          <label for="player1Name">Player 1 Name</label>
+        </div>
+        <div class="input-field col s3">
+          <input id="player2Name" type="text" class="validate">
+          <label for="player2Name">Player 2 Name</label>
+        </div>
+      </div>
+      <div class="row">
       </div>
       <div class="modal-footer">
         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Start Game</a>
