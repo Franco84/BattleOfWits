@@ -277,7 +277,7 @@ function ptsButtons(){
 }
 
 $(document).ready(function(){
-  // $(`audio#feud`)[0].play()
+  $(`audio#feud`)[0].play()
   $intro = $('.intro')
   $modal = $('.modal')
   ptsButtons()
@@ -298,6 +298,8 @@ $(document).ready(function(){
        maxPoints = parseInt($('.pts-clicked').text())
        $('.intro').detach()
        $('.modal').detach()
+       $(`audio#feud`)[0].pause()
+       $(`audio#feud`)[0].currentTime = 0
        runner();
       }
     }
