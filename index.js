@@ -119,7 +119,7 @@ function clearQuestionPage(){
 /// Start Timer ///
 
 function startTimer() {
-  seconds = 30
+  seconds = 10
   $('div.timer-div').append(`<h3 class="timer">${seconds}</h3>`)
   intervalID = setInterval(countDown, 1000)
 }
@@ -132,6 +132,8 @@ function countDown() {
   }
   if (seconds < 1) {
     stopTimer(intervalID)
+    timerEnd()
+    endRound()
   }
 }
 
@@ -140,6 +142,16 @@ function stopTimer(){
 }
 
 /// End Timer ///
+
+function timerEnd(){
+  $('div.timer-div').append("<img src=images/trump.jpg></img>")
+  setTimeout(function(){
+    $('audio#wrong')[0].play()
+  }, 300)
+  setTimeout(function(){
+    $('img').remove()
+  }, 1000)
+}
 
 function showQuestion(){
   $('div.firstRow').append(`<p>${question[0].question}</p>`)
@@ -208,6 +220,7 @@ function endGame(){
     player2.points = 0
     $(`.player1-points`).text('0')
     $(`.player2-points`).text('0')
+    currentPlayer = player1
   }, 5000)
 
 }
