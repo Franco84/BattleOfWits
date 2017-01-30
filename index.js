@@ -9,6 +9,7 @@ var player2 = {"points": 0, "name": "Player 2", "id": 2}
 var currentPlayer = player1
 var difficulty
 var submitted = false
+var maxPoints
 
 function shuffle(categories) {
     for (let i = categories.length; i; i--) {
@@ -16,6 +17,11 @@ function shuffle(categories) {
         [categories[i - 1], categories[j]] = [categories[j], categories[i - 1]];
     }
     return categories.slice(0, 6)
+}
+
+function addNames(){
+  $(`.player1-name`).text(player1.name)
+  $(`.player2-name`).text(player2.name)
 }
 
 function createButtons(){
@@ -64,9 +70,11 @@ function createEventListener(){
 }
 
 function runner(){
+  addNames()
   createButtons()
   createEventListener()
 }
+
 
 function submit(){
   let categoryId = $('.cat-clicked')[0].dataset.catid
@@ -248,6 +256,9 @@ $(document).ready(function(){
      startingTop: '4%',
      endingTop: '10%',
      complete: function() {
+       player1.name = $('#player1Name').val()
+       player2.name = $('#player2Name').val()
+       // maxPoints = this.clicked
        $('.intro').remove()
        $('.modal').remove()
        runner();
