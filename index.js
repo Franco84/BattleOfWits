@@ -114,7 +114,6 @@ function clearQuestionPage(){
   // }, 750)
 }
 
-
 /// Start Timer ///
 
 function startTimer() {
@@ -186,13 +185,20 @@ function endRound() {
   clearQuestionPage()
   stopTimer()
   submitted = false
-  checkEndGame()
+  if (currentPlayer.points >= maxPoints){
+    endGame()
+    return
+  }
   switchPlayers()
   setTimeout(runner, 1500)
 }
 
-function checkEndGame(){
-  // if (currentPlayer.points >= final)
+function endGame(){
+  $('.timer-div').append(`<h1 class="scale-transition scale-out winner">${currentPlayer.name} wins!</h1>`)
+  $('.winner').delay(1500).queue(function(){
+    $('.winner').addClass('scale-in')
+  })
+
 }
 
 function switchPlayers(){
@@ -238,12 +244,18 @@ function diffVal(){
   }
 }
 
-// $(document).ready(function(){
-//   $('.modal-trigger').leanModal()
-// }
+function ptsButtons(){
+  $('.pointswin').on('click', function(){
+    $('audio#pop')[0].play()
+    $('.pointswin').removeClass("pts-clicked darken-4")
+    $(this).addClass("pts-clicked darken-4")
+  })
+}
 
 $(document).ready(function(){
-  $(`audio#feud`)[0].play()
+  // $(`audio#feud`)[0].play()
+  $modal = $('.modal')
+  ptsButtons()
   $('.modal-btn').on('click', function(){
     $('.modal').css("visibility", "")
   })
@@ -258,7 +270,7 @@ $(document).ready(function(){
      complete: function() {
        player1.name = $('#player1Name').val()
        player2.name = $('#player2Name').val()
-       // maxPoints = this.clicked
+       maxPoints = parseInt($('.pts-clicked').text())
        $('.intro').remove()
        $('.modal').remove()
        runner();
@@ -266,6 +278,3 @@ $(document).ready(function(){
     }
     )
   });
-
-
-// $(document).ready(runner)
