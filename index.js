@@ -119,7 +119,7 @@ function clearQuestionPage(){
 /// Start Timer ///
 
 function startTimer() {
-  seconds = 10
+  seconds = 30
   $('div.timer-div').append(`<h3 class="timer">${seconds}</h3>`)
   intervalID = setInterval(countDown, 1000)
 }
