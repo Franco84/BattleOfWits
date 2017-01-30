@@ -88,7 +88,7 @@ function submit(){
       question = jsonp.results
       randomChoices()
       clearPage()
-      setTimeout(question, 750)
+      setTimeout(showQuestion, 750)
       setTimeout(startTimer, 750)
       setTimeout(createAnswerListener, 751)
     }).fail(function(err) {
@@ -168,7 +168,6 @@ function showQuestion(){
   })
 }
 
-
 function scaleIn(index){
   $(`.buttonid${index}`).delay(500*(index+1)).queue(function(){
     $(this).addClass('scale-in')
@@ -237,7 +236,7 @@ function switchPlayers(){
 function correctAnswer(){
   currentPlayer.points += diffVal()
   $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
-  $('div.timer-div').append("<img class='circle responsive-img' src=images/Satisfied.jpg></img>")
+  $('div.timer-div').append("<img src=images/Satisfied.jpg></img>")
   correctSound()
   setTimeout(function(){
     $('img').remove()
@@ -250,7 +249,7 @@ function correctSound(){
 }
 
 function wrongAnswer(){
-  $('div.timer-div').append("<img class='circle responsive-img'src=images/trump.jpg></img>")
+  $('div.timer-div').append("<img src=images/trump.jpg></img>")
   setTimeout(function(){
     $('audio#wrong')[0].play()
   }, 300)
@@ -277,17 +276,10 @@ function ptsButtons(){
   })
 }
 
-function showIntro(){
-  paragraph = $('p.intro').text
-  letters = paragraph.split("")
-
-}
-
 $(document).ready(function(){
-  $(`audio#feud`)[0].play()
+  // $(`audio#feud`)[0].play()
   $intro = $('.intro')
   $modal = $('.modal')
-  // showIntro()
   ptsButtons()
   $('.modal-btn').on('click', function(){
     $('.modal').css("visibility", "")
@@ -306,17 +298,11 @@ $(document).ready(function(){
        maxPoints = parseInt($('.pts-clicked').text())
        $('.intro').detach()
        $('.modal').detach()
-       $(`audio#feud`)[0].pause()
-       $(`audio#feud`)[0].currentTime = 0
        runner();
       }
     }
     )
   });
-
-
-
-
 
 
 
