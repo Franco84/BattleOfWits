@@ -54,3 +54,7 @@ img {
   display: block;
   margin: auto;
 }
+
+button {
+  border-radius: 25px !important;
+}
