@@ -10,6 +10,8 @@ var currentPlayer = player1
 var difficulty
 var submitted = false
 var maxPoints
+var $intro
+var $modal
 
 function shuffle(categories) {
     for (let i = categories.length; i; i--) {
@@ -130,6 +132,8 @@ function countDown() {
   }
   if (seconds < 1) {
     stopTimer(intervalID)
+    timerEnd()
+    endRound()
   }
 }
 
@@ -138,6 +142,16 @@ function stopTimer(){
 }
 
 /// End Timer ///
+
+function timerEnd(){
+  $('div.timer-div').append("<img src=images/trump.jpg></img>")
+  setTimeout(function(){
+    $('audio#wrong')[0].play()
+  }, 300)
+  setTimeout(function(){
+    $('img').remove()
+  }, 1000)
+}
 
 function showQuestion(){
   $('div.firstRow').append(`<p>${question[0].question}</p>`)
@@ -198,6 +212,16 @@ function endGame(){
   $('.winner').delay(1500).queue(function(){
     $('.winner').addClass('scale-in')
   })
+  setTimeout(function(){
+    $('.timer-div h1').remove()
+    $intro.appendTo('.main-div')
+    $modal.appendTo('body')
+    player1.points = 0
+    player2.points = 0
+    $(`.player1-points`).text('0')
+    $(`.player2-points`).text('0')
+    currentPlayer = player1
+  }, 5000)
 
 }
 
@@ -254,6 +278,7 @@ function ptsButtons(){
 
 $(document).ready(function(){
   // $(`audio#feud`)[0].play()
+  $intro = $('.intro')
   $modal = $('.modal')
   ptsButtons()
   $('.modal-btn').on('click', function(){
@@ -271,8 +296,8 @@ $(document).ready(function(){
        player1.name = $('#player1Name').val()
        player2.name = $('#player2Name').val()
        maxPoints = parseInt($('.pts-clicked').text())
-       $('.intro').remove()
-       $('.modal').remove()
+       $('.intro').detach()
+       $('.modal').detach()
        runner();
       }
     }
