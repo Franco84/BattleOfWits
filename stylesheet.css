@@ -58,3 +58,9 @@ img {
 button {
   border-radius: 25px !important;
 }
+
+body {
+    background-color: #000000;
+    margin: 0px;
+    overflow: hidden;
+}
