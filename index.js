@@ -88,7 +88,7 @@ function submit(){
       question = jsonp.results
       randomChoices()
       clearPage()
-      setTimeout(stion, 750)
+      setTimeout(question, 750)
       setTimeout(startTimer, 750)
       setTimeout(createAnswerListener, 751)
     }).fail(function(err) {
