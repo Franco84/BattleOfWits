@@ -235,6 +235,7 @@ function diffVal(){
 // }
 
 $(document).ready(function(){
+  $(`audio#feud`)[0].play()
   $('.modal-btn').on('click', function(){
     $('.modal').css("visibility", "")
   })
