@@ -19,30 +19,39 @@ function shuffle(categories) {
 }
 
 function createButtons(){
+  $('div.timer-div').append(`<p style="color: #ffffff">${currentPlayer.name}</p>`).hide()
   let sixCategories = shuffle(categories)
   let firstRow = sixCategories.slice(0, 3)
   let secondRow = sixCategories.slice(3, 6)
   firstRow.forEach(function(e){
-    $('div.firstRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
+    $('div.firstRow').append(`<button class="btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
   })
   secondRow.forEach(function(e){
-    $('div.secondRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
+    $('div.secondRow').append(`<button class="btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
   })
   difficulties.forEach(function(e){
-    $('div.difficultyRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 difficulty" data-diffid=${e}>${e}</button>`).hide()
+    $('div.difficultyRow').append(`<button class="btn-large blue lighten-2 difficulty" data-diffid=${e}>${e}</button>`).hide()
   })
   $('div.submitRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 submit">Go!</button>`).hide()
   $('div').fadeIn(750)
 }
 
 function createEventListener(){
+
+  $("div.row").on('click', '.category, .difficulty, .answer', function(){
+    $('audio#pop')[0].play()
+  })
+  $("div.row").on('click', '.submit', function(){
+    $('audio#chime')[0].play()
+  })
+
   $(".category").on('click', function(){
-    $(".category").removeClass("cat-clicked")
-    $(this).addClass("cat-clicked")
+    $(".category").removeClass("cat-clicked darken-4")
+    $(this).addClass("cat-clicked darken-4")
   })
   $(".difficulty").on('click', function(){
-    $(".difficulty").removeClass("diff-clicked")
-    $(this).addClass("diff-clicked")
+    $(".difficulty").removeClass("diff-clicked darken-4")
+    $(this).addClass("diff-clicked darken-4")
   })
   $(".submit").on('click', function(){
     //search for clicked classes or else do not proceed
@@ -124,22 +133,31 @@ function stopTimer(){
 /// End Timer ///
 
 function showQuestion(){
-  $('div.firstRow').append(`<p>${question[0].question}</p>`).hide()
-  $('div.difficultyRow').append(`<button class="waves-effect waves-light btn blue lighten-2 submit">Final Answer!</button>`).hide()
-  $('div.firstRow').fadeIn(500)
+  $('div.firstRow').append(`<p>${question[0].question}</p>`)
+  $('div.difficultyRow').append(`<button class="waves-effect waves-light btn blue lighten-2 scale-transition scale-out submit">Final Answer!</button>`)
+  $('div.firstRow')
   choices.forEach(function(e, index){
-    $('div.secondRow').append(`<div class="buttonid${index} button-div"></div>`)
-    $(`.buttonid${index}`).hide()
-    $(`.buttonid${index}`).append(`<button class="waves-effect waves-light btn-large blue lighten-2 answer" id=${index}>${e}</button>`)
-    $(`.buttonid${index}`).delay(500*(index+1)).fadeIn(500)
+    $('div.secondRow').append(`<div class="buttonid${index} scale-transition scale-out button-div"></div>`)
+    $(`.buttonid${index}`).append(`<button class="btn-large blue lighten-2 answer" id=${index}>${e}</button>`)
+    scaleIn(index)
   })
-  $('div.difficultyRow').delay(2500).fadeIn(500)
+  $('.submit').delay(2500).queue(function(){
+    $(this).addClass('scale-in')
+    $('audio#woosh')[0].play()
+  })
+}
+
+function scaleIn(index){
+  $(`.buttonid${index}`).delay(500*(index+1)).queue(function(){
+    $(this).addClass('scale-in')
+    $('audio#woosh')[0].play()
+  })
 }
 
 function createAnswerListener(){
   $(".answer").on('click', function(){
-    $(".answer").removeClass("answer-clicked")
-    $(this).addClass("answer-clicked")
+    $(".answer").removeClass("answer-clicked darken-4")
+    $(this).addClass("answer-clicked darken-4")
   })
   $(".submit").on('click', function(){
     //search for clicked classes or else do not proceed
@@ -162,7 +180,7 @@ function endRound() {
   submitted = false
   checkEndGame()
   switchPlayers()
-  setTimeout(runner, 1000)
+  setTimeout(runner, 1500)
 }
 
 function checkEndGame(){
@@ -181,12 +199,10 @@ function correctAnswer(){
   currentPlayer.points += diffVal()
   $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
   $('div.timer-div').append("<img src=images/Satisfied.jpg></img>")
-  setTimeout(function(){
-    $('audio#educated')[0].play()
-  }, 50)
+  $('audio#educated')[0].play()
   setTimeout(function(){
     $('img').remove()
-  }, 1000)
+  }, 1500)
 }
 
 function wrongAnswer(){
