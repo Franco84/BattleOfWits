@@ -81,7 +81,7 @@ function runner(){
 function submit(){
   let categoryId = $('.cat-clicked')[0].dataset.catid
   difficulty = $('.diff-clicked')[0].dataset.diffid
-  let link = `http://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty.toLowerCase()}&type=multiple`
+  let link = `https://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty.toLowerCase()}&type=multiple`
   $.ajax({
     url: link,
     method: 'GET'}).done(function(jsonp){
