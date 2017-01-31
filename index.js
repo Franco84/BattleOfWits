@@ -84,8 +84,7 @@ function submit(){
   let link = `http://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty.toLowerCase()}&type=multiple`
   $.ajax({
     url: link,
-    crossDomain: true,
-    headers: {'Access-Control-Request-Headers': 'x-requested-with'},
+    headers: {'Access-Control-Request-Method': 'GET', 'Content-Type':'application/x-www-form-urlencoded'},
     method: 'GET'}).done(function(jsonp){
       question = jsonp.results
       randomChoices()
