@@ -87,7 +87,7 @@ function submit(){
     // headers: {'Access-Control-Request-Method': 'GET', 'Content-Type':'application/x-www-form-urlencoded'},
     dataType: 'jsonp',
     method: 'GET'}).done(function(jsonp){
-      question = jsonp.results
+      question = JSON.parse(jsonp.results)
       randomChoices()
       clearPage()
       setTimeout(showQuestion, 750)
