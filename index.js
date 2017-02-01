@@ -81,13 +81,13 @@ function runner(){
 function submit(){
   let categoryId = $('.cat-clicked')[0].dataset.catid
   difficulty = $('.diff-clicked')[0].dataset.diffid
-  let link = `http://www.opentdb.com/api.php?amount=1&category=${categoryId}&difficulty=${difficulty.toLowerCase()}&type=multiple`
+  let link = `http://battleofwitshelper.herokuapp.com/trivia/${categoryId}x${difficulty.toLowerCase()}`
   $.ajax({
     url: link,
-    // headers: {'Access-Control-Request-Method': 'GET', 'Content-Type':'application/x-www-form-urlencoded'},
-    dataType: 'jsonp',
-    method: 'GET'}).done(function(jsonp){
-      question = JSON.parse(jsonp.results)
+    method: 'GET',
+    }).done(function(jsonp){
+      debugger
+      question = jsonp.results
       randomChoices()
       clearPage()
       setTimeout(showQuestion, 750)
