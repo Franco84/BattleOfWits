@@ -86,7 +86,6 @@ function submit(){
     url: link,
     method: 'GET',
     }).done(function(jsonp){
-      debugger
       question = jsonp.results
       randomChoices()
       clearPage()
