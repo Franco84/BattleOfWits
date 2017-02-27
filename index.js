@@ -205,12 +205,12 @@ function endRound() {
     return
   }
   switchPlayers()
-  setTimeout(runner, 1500)
+  setTimeout(runner, 2000)
 }
 
 function endGame(){
   $('.timer-div').append(`<h1 class="scale-transition scale-out winner">${currentPlayer.name} wins!</h1>`)
-  $('.winner').delay(1500).queue(function(){
+  $('.winner').delay(2000).queue(function(){
     $('.winner').addClass('scale-in')
   })
   setTimeout(function(){
@@ -234,14 +234,24 @@ function switchPlayers(){
   }
 }
 
+// function correctAnswer(){
+//   currentPlayer.points += diffVal()
+//   $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
+//   $('div.timer-div').append("<img src=images/Satisfied.jpg></img>")
+//   correctSound()
+//   setTimeout(function(){
+//     $('img').remove()
+//   }, 1500)
+// }
 function correctAnswer(){
   currentPlayer.points += diffVal()
   $(`.player${currentPlayer.id}-points`).text(currentPlayer.points)
-  $('div.timer-div').append("<img src=images/Satisfied.jpg></img>")
-  correctSound()
+  $('div.timer-div').append("<h2 class='correct'>Correct!</h2>")
+  $('audio#correct')[0].play()
+  // correctSound()
   setTimeout(function(){
-    $('img').remove()
-  }, 1500)
+    $('.correct').remove()
+  }, 2000)
 }
 
 function correctSound(){
@@ -249,17 +259,28 @@ function correctSound(){
   $(`audio#${sounds[0]}`)[0].play()
 }
 
+// function (){
+//   $('div.timer-div').append("<img src=images/trump.jpg></img>")
+//   setTimeout(function(){
+//     $('audio#wrong')[0].play()
+//   }, 300)
+//   setTimeout(function(){
+//     $('img').remove()
+//   }, 1000)
+// }
 function wrongAnswer(){
-  $('div.timer-div').append("<img src=images/trump.jpg></img>")
+  $('div.timer-div').append("<h2 class='correct-answer'>The correct answer was</h2>")
+  $('audio#incorrect')[0].play()
   setTimeout(function(){
-    $('audio#wrong')[0].play()
-  }, 300)
+    $('div.timer-div').append(`<h2 class='correct-answer'>${question[0].correct_answer}</h2>`)
+  }, 600)
   setTimeout(function(){
-    $('img').remove()
-  }, 1000)
+    $('.correct-answer').remove()
+  }, 2000)
 }
 
 function diffVal(){
+  debugger
   if (difficulty === "Easy"){
     return 1
   } else if (difficulty === "Medium") {
