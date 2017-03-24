@@ -37,8 +37,9 @@ function createButtons(){
   secondRow.forEach(function(e){
     $('div.secondRow').append(`<button class="btn-large blue lighten-2 category" data-catid=${e[0]}>${e[1]}</button>`).hide()
   })
-  difficulties.forEach(function(e){
-    $('div.difficultyRow').append(`<button class="btn-large blue lighten-2 difficulty" data-diffid=${e}>${e}</button>`).hide()
+  difficulties.forEach(function(e, i){
+    debugger
+    $('div.difficultyRow').append(`<button class="btn-large blue lighten-2 difficulty" data-diffid=${e}>${e} - ${i + 1}</button>`).hide()
   })
   $('div.submitRow').append(`<button class="waves-effect waves-light btn-large blue lighten-2 submit">Go!</button>`).hide()
   $('div').fadeIn(750)
