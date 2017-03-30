@@ -280,7 +280,6 @@ function wrongAnswer(){
 }
 
 function diffVal(){
-  debugger
   if (difficulty === "Easy"){
     return 1
   } else if (difficulty === "Medium") {
